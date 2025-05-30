@@ -3,30 +3,55 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Surprise</title>
+    <title>Surprise Just For You</title>
     <style>
         html,
         body {
             margin: 0;
             padding: 0;
-            background-color: black;
             height: 100%;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             font-family: Arial, sans-serif;
+            background: white;
+            position: relative;
         }
 
         #explosionCanvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: 0;
+            pointer-events: none;
+            /* 讓點擊事件穿透 */
+        }
+
+        #introText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 32px;
+            color: #333;
+            z-index: 2;
+            padding: 0 20px;
         }
 
         #btnWrapper {
-            z-index: 1;
+            position: absolute;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+            display: none;
         }
 
         #boomBtn {
@@ -41,65 +66,148 @@
         }
 
         #countdown {
-            font-size: 80px;
-            color: white;
-            display: none;
-            z-index: 2;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            font-size: 80px;
+            color: #ee2560;
+            z-index: 3;
             user-select: none;
-            text-align: center;
+            display: none;
             white-space: nowrap;
-            line-height: 1;
+        }
+
+        #mainPage {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            color: #2E5266;
         }
     </style>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 </head>
 
 <body>
+    <audio id="bgm" src="bgm.mp3" loop></audio>
+
     <canvas id="explosionCanvas"></canvas>
 
-    <div id="btnWrapper">
-        <button id="boomBtn">
-            <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="按鈕圖片" />
-            <!-- 這裡可換成你自己的圖片 -->
+    <div id="introText"></div>
+
+    <div id="btnWrapper" style="display:none;">
+        <button id="boomBtn" aria-label="開始驚喜">
+            <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="爆炸按鈕" />
         </button>
     </div>
 
-    <div id="countdown">5</div>
+    <div id="countdown"></div>
+
+    <button id="startBtn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 5; background: none; border: none; color: #000; font-size: 32px; cursor: pointer; padding: 0;">
+        開始播放音樂並進入驚喜
+    </button>
+
+    <!-- main 頁面內容（隱藏） -->
+    <div id="mainPage">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="img/picture1.jpg" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>First slide label</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="..." class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Second slide label</h5>
+                        <p>Some representative placeholder content for the second slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="..." class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Third slide label</h5>
+                        <p>Some representative placeholder content for the third slide.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
 
     <script>
-        const canvas = document.getElementById("explosionCanvas");
-        const ctx = canvas.getContext("2d");
-        let w, h;
+        // 參數與元素
+        const startBtn = document.getElementById('startBtn');
+        const bgm = document.getElementById('bgm');
+        const introText = document.getElementById('introText');
+        const btnWrapper = document.getElementById('btnWrapper');
+        const boomBtn = document.getElementById('boomBtn');
+        const countdown = document.getElementById('countdown');
+        const canvas = document.getElementById('explosionCanvas');
+        const ctx = canvas.getContext('2d');
+        const mainPage = document.getElementById('mainPage');
 
+        let w, h;
         function resize() {
             w = canvas.width = window.innerWidth;
             h = canvas.height = window.innerHeight;
         }
-        window.addEventListener("resize", resize);
+        window.addEventListener('resize', resize);
         resize();
 
+        // 爆炸粒子
         const particles = [];
+        let animationRunning = false;
 
         function createExplosion(x, y) {
             for (let i = 0; i < 100; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const speed = Math.random() * 4 + 1;
                 particles.push({
-                    x,
-                    y,
-                    vx: Math.cos(i) * (Math.random() * 4 + 1),
-                    vy: Math.sin(i) * (Math.random() * 4 + 1),
+                    x, y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
                     life: 60,
-                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                    color: `hsl(${Math.random() * 360}, 100%, 60%)`
                 });
+            }
+            if (!animationRunning) {
+                animationRunning = true;
+                animateExplosion();
             }
         }
 
         function animateExplosion() {
             ctx.clearRect(0, 0, w, h);
             for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
+                let p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
                 p.life--;
@@ -114,47 +222,87 @@
             }
             if (particles.length > 0) {
                 requestAnimationFrame(animateExplosion);
+            } else {
+                animationRunning = false;
             }
         }
 
-        const boomBtn = document.getElementById("boomBtn");
-        const countdown = document.getElementById("countdown");
+        // 文字訊息
+        const messages = [
+            "是的點一下音樂就開始ㄌ",
+            "這是一個技術問題我沒有解決QAQ",
+            "要讓音樂一直放我搞超久==",
+            "無論如何，今天是個特別的日子！",
+            "我不說是甚麼你也猜的到吧？",
+            "畢竟我們小公主這麼聰明OuO",
+            "這是一個小小的驚喜...",
+            "請準備好你的心情...",
+            "按下這顆按鈕吧！",
+            "不准給我亂點ㄛ"
+        ];
+        let msgIndex = 0;
 
-        boomBtn.addEventListener("click", () => {
-            const rect = boomBtn.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+        function showNextMessage() {
+            if (msgIndex < messages.length) {
+                introText.textContent = messages[msgIndex++];
+                setTimeout(showNextMessage, 4000);
+            } else {
+                setTimeout(() => {
+                    introText.style.opacity = 0;
+                    setTimeout(() => {
+                        introText.style.display = 'none';
+                        btnWrapper.style.display = 'block';
+                    }, 1000);
+                }, 2000);
+            }
+        }
 
-            createExplosion(centerX, centerY);
-            animateExplosion();
-
-            boomBtn.style.display = "none";
+        // 倒數與切換主頁
+        function startCountdownAndExplosion() {
+            boomBtn.style.display = 'none';
 
             let count = 5;
             countdown.textContent = count;
-            countdown.style.display = "block";
+            countdown.style.display = 'block';
 
-            const centerScreenX = window.innerWidth / 2;
-            const centerScreenY = window.innerHeight / 2;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
 
             const interval = setInterval(() => {
-                createExplosion(centerScreenX, centerScreenY);
-                animateExplosion();
-
-                count--;
-                if (count > 0) {
-                    countdown.textContent = count;
-                } else {
+                createExplosion(centerX, centerY);
+                countdown.textContent = count--;
+                if (count < 0) {
                     clearInterval(interval);
-                    countdown.textContent = "Happy Birthday for you";
+                    countdown.textContent = "Happy Birthday For You";
 
                     setTimeout(() => {
-                        window.location.href = "1/index.html"; // 倒數完跳轉 
+                        countdown.style.display = 'none';
+
+                        // 不跳頁，改顯示主頁
+                        document.body.style.overflow = 'auto'; // 解除 overflow hidden (如有)
+                        mainPage.style.display = 'block';
+                        btnWrapper.style.display = 'none';
                     }, 3000);
                 }
             }, 1000);
+        }
+
+        // 事件綁定
+        startBtn.addEventListener('click', () => {
+            bgm.play().then(() => {
+                startBtn.style.display = 'none';
+                showNextMessage();
+            }).catch(e => {
+                alert('無法播放音樂，請確認瀏覽器設定');
+                console.error(e);
+            });
+        });
+
+        boomBtn.addEventListener('click', () => {
+            startCountdownAndExplosion();
         });
     </script>
+
 </body>
 
 </html>
